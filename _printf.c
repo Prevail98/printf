@@ -35,6 +35,15 @@ int _printf(const char *format, ...)
                     }
                     break;
                 }
+                case 'd':
+                case 'i': {
+                    int num = va_arg(args, int);
+                    char buffer[12];
+                    sprintf(buffer, "%d", num);
+                    printf("%s", buffer);
+                    printed_chars += strlen(buffer);
+                    break;
+                }
                 case '%': {
                     putchar('%');
                     printed_chars++;
