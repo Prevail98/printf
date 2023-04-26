@@ -11,40 +11,46 @@
 
 int _printf(const char *format, ...)
 {
-	va_list args;
-	int i, j, k, count;
-	var_t type[] = {
-		{"c", c_func}, {"s", s_func}, {"i", i_func}, {"%", perc_func},
-		{"d", d_func},	{"b", b_func},	{"r", rev_func}, {"R", rot_func},
-		{NULL, NULL},
-	};
+    va_list args;
+    int printed_chars = 0;
 
-	va_start(args, format);
-	i = 0, count = 0, k = 0;
-	if (format == NULL || (format[0] == '%' && format[1] == '\0'))
-		return (-1);
-	while (format && format[i])
-	{
-		if (format[i] != '%')
-			_putchar(format[i]), k++;
-		else
-		{
-			j = 0;
-			while (type[j].vartype)
-			{
-				if (format[i + 1] == *type[j].vartype)
-				{
-					count += (type[j].f)(args), i++;
-					break;
-				}
-				j++;
-			}
-			if (type[j].vartype == NULL)
-				count += 1, _putchar('%');
-		}
-		i++;
-	}
-	k += count;
-	va_end(args);
-	return (k);
+    va_start(args, format);
+
+    while (*format != '\0') {
+        if (*format == '%') {
+            format++;
+            switch (*format) {
+                case 'c': {
+                    char c = va_arg(args, int);
+                    putchar(c);
+                    printed_chars++;
+                    break;
+                }
+                case 's': {
+                    char *s = va_arg(args, char*);
+                    while (*s != '\0') {
+                        putchar(*s);
+                        s++;
+                        printed_chars++;
+                    }
+                    break;
+                }
+                case '%': {
+                    putchar('%');
+                    printed_chars++;
+                    break;
+                }
+                default: {
+                    break;
+                }
+            }
+        } else {
+            putchar(*format);
+            printed_chars++;
+        }
+        format++;
+    }
+
+    va_end(args);
+    return printed_chars;
 }
