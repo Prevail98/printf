@@ -31,4 +31,4 @@ int b_func(va_list args);
 int rev_func(va_list args);
 int rot_func(va_list args);
 
-#endif 
+#endif
